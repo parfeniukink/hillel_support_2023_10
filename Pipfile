@@ -12,6 +12,7 @@ djangorestframework-simplejwt = { version = "~=5.3", extras = "crypto" }
 
 [dev-packages]
 black = "~=23.7"
+django-stubs = "~=1.2"
 grequests = "*"
 ipdb = "*"
 isort = "~=5.12"

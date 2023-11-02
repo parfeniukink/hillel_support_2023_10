@@ -1,36 +1,35 @@
-from dataclasses import dataclass
+import requests
+from pydantic import BaseModel
 
-from rest_framework import serializers
+url: str = "https://pokeapi.co/api/v2/pokemon/pikachu"
 
+response: requests.Response = requests.get(url)
+response_as_dict: dict = response.json()
 
-@dataclass
-class UserRegistrationSchema:
-    email: str
-    password: str
-    first_name: str | None = None
-    last_name: str | None = None
+# fields: list[str] = ["id", "name", "weight"]
 
+# result = {}
 
-class UserRegistrationSerializer(serializers.Serializer):
-    email = serializers.CharField(max_length=50)
-    password = serializers.CharField(max_length=50)
-    first_name = serializers.CharField(max_length=50, allow_null=True)
-    last_name = serializers.CharField(max_length=50, allow_null=True)
-
-    def validate_email(self, value: str) -> str:
-        # TODO: Do something
-        return value
+# for key, value in response_as_dict.items(): #     if key in fields:
+#         result[key] = value
 
 
-payload = {
-    "email": "john@email.com",
-    "password": "@Dm1n#LKJ",
-    "first_name": "John",
-    "last_name": "Doe",
-}
+class Pokemon(BaseModel):
+    id: int
+    name: str
+    weight: int
 
-schema = UserRegistrationSchema(**payload)
-# user = User(email=schema.email, password=schema.password...)
-serializer = UserRegistrationSerializer(data=payload)
+    @property
+    def new_pokemon(self) -> bool:
+        if self.id > 20:
+            return True
+        return False
 
-print(serializer.is_valid(raise_exception=True))
+
+pokemon = Pokemon(
+    id=response_as_dict["id"],
+    name=response_as_dict["name"],
+    weight=response_as_dict["weight"],
+)
+
+print(pokemon)

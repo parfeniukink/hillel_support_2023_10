@@ -12,7 +12,7 @@ class Issue(TimestampMixin):
     body = models.CharField(max_length=255)
     status = models.CharField(max_length=10)
 
-    junior = models.ForeignKey(
+    junior = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.DO_NOTHING,
         related_name="junior_issues",

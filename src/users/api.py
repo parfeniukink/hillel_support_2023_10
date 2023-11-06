@@ -1,10 +1,12 @@
 import json
 from django.http import JsonResponse
 from rest_framework.generics import CreateAPIView, GenericAPIView
-from rest_framework import serializers, permissions
+from rest_framework import serializers, permissions, status
+from rest_framework.response import Response
 from django.contrib.auth.hashers import make_password
 
 from .models import User
+from .services import send_user_activation_email
 
 
 # FBV
@@ -47,6 +49,18 @@ class UserSerializer(serializers.ModelSerializer):
 class UserCreateAPI(CreateAPIView):
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+
+        send_user_activation_email(email=serializer.data["email"])
+
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
 
 class UserRetrieveAPI(GenericAPIView):

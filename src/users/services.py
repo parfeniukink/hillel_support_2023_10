@@ -1,7 +1,8 @@
+import random
 import string
 import uuid
-from django.core.mail import send_mail
-from .models import User
+from django.core.mail import send_mail as _send_mail
+from config.celery import celery_app
 
 
 def create_activation_key(email: str) -> uuid.UUID:
@@ -14,9 +15,29 @@ def create_activation_link(activation_key: uuid.UUID) -> str:
 
 def create_random_email() -> str:
     domain = "gmail.com"
-    email_value = "".join(string.ascii_lowercase for _ in range(10))
+    email_value = "".join(random.choice(string.ascii_lowercase) for _ in range(10))
 
     return f"{email_value}@{domain}"
+
+
+import time
+
+
+@celery_app.task
+def send_activation_mail(recipient: str, activation_link: uuid.UUID):
+    time.sleep(1)
+
+    random_value: int = random.randint(1, 11)
+    if random_value > 5:
+        raise Exception("Something went wrong")
+
+    _send_mail(
+        subject="User activation",
+        message=f"Please activate your account: {activation_link}",
+        from_email="admin@admin.com",
+        recipient_list=[recipient],
+        fail_silently=False,
+    )
 
 
 def send_user_activation_email(email: str) -> None:
@@ -25,12 +46,7 @@ def send_user_activation_email(email: str) -> None:
     activation_key: uuid.UUID = create_activation_key(email)
     activation_link: str = create_activation_link(activation_key)
 
-    # IO-bound
-    for _ in range(1000):
-        send_mail(
-            subject="User activation",
-            message=f"Please activate your account: {activation_link}",
-            from_email="admin@admin.com",
-            recipient_list=[create_random_email()],
-            fail_silently=False,
+    for _ in range(20):
+        send_activation_mail.delay(
+            recipient=create_random_email(), activation_link=activation_link
         )

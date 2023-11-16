@@ -4,11 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+celery = {version = "==5.3.4", extras = ["redis"]}
 Django = "~=4.2"
-requests = "~=2.31"
-pydantic = "~=2.4"
 djangorestframework = "~=3.14"
-djangorestframework-simplejwt = { version = "~=5.3", extras = "crypto" }
+djangorestframework-simplejwt = { version = "~=5.3", extras = ["crypto"] }
+gunicorn = "==21.2.0"
+pydantic = "~=2.4"
+requests = "~=2.31"
 
 [dev-packages]
 black = "~=23.7"

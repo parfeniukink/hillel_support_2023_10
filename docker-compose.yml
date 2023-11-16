@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+    image: hillel_support
+    container_name: hillel_support_app
+    volumes:
+      - ".:/app/"
+    ports:
+      - "8015:8000"

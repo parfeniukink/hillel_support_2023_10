@@ -20,6 +20,6 @@ RUN pipenv sync --dev --system
 WORKDIR /app/
 
 ENTRYPOINT [ "gunicorn" ]
-CMD ["--workers=2", "config:application", "--bind=0.0.0.0:8000"]
+CMD ["--workers=2", "config.wsgi:application", "--bind=0.0.0.0:8000"]
 
 # CMD python  src/manage.py runserver 0.0.0.0:8000

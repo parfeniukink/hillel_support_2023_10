@@ -1,5 +1,7 @@
+import os
 from pathlib import Path
 from datetime import timedelta
+from distutils.util import strtobool
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 SRC_DIR = Path(__file__).resolve().parent.parent
@@ -8,14 +10,15 @@ ROOT_DIR = SRC_DIR.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# TODO: Move?
-SECRET_KEY = "django-insecure-8py68-0=k5%sp4_yk2^=de*^ga&q3mo#$%4h(gk+$_-0f!^!$o"
+
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", default="insecure")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = os.getenv("DJANGO_DEBUG")
+DEBUG = strtobool(os.getenv("DJANGO_DEBUG", default=False))
 
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [element for element in os.getenv("DJANGO_ALLOWED_HOSTS").split(",") if element]
 
 # Application definition
 

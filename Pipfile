@@ -9,6 +9,7 @@ Django = "~=4.2"
 djangorestframework = "~=3.14"
 djangorestframework-simplejwt = { version = "~=5.3", extras = ["crypto"] }
 gunicorn = "==21.2.0"
+psycopg2-binary = "~=2.9.9"
 pydantic = "~=2.4"
 requests = "~=2.31"
 

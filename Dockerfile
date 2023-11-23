@@ -18,6 +18,7 @@ RUN pipenv sync --dev --system
 
 # cd /app (create if not exist)
 WORKDIR /app/
+COPY ./ ./ 
 
 ENTRYPOINT [ "gunicorn" ]
 CMD ["--workers=2", "config.wsgi:application", "--bind=0.0.0.0:8000"]

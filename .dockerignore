@@ -1,0 +1,15 @@
+.github/
+.idea/
+.ruff_cache/
+.vscode/
+deprecated/
+docs/
+frontend/
+http/
+scripts/
+db.sqlite3
+.gitignore
+docker-compose.yml
+Dockerfile
+Makefile
+*.md

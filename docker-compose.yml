@@ -5,14 +5,10 @@ services:
   broker:
     image: "redis"
     container_name: hillel_support_broker
-    ports:
-      - "6379:6379"
 
   database:
     image: "postgres:16"
     container_name: hillel_support_db
-    ports:
-      - "5432:5432"
     env_file: ".env"
     # environment:
     #   - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

@@ -9,44 +9,44 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.11]
+  # build:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       python-version: [3.11]
 
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v4
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
 
-      - name: Lint
-        # run: python -m ruff .
-        run: echo "Linting is good"
+  #     - name: Lint
+  #       # run: python -m ruff .
+  #       run: echo "Linting is good"
 
-      - name: Check formatting
-        # run: python -m black --check .
-        run: echo "Formatting is good"
+  #     - name: Check formatting
+  #       # run: python -m black --check .
+  #       run: echo "Formatting is good"
 
-      - name: Check import sorting
-        # run: python -m isort --check .
-        run: echo "Imports are good"
+  #     - name: Check import sorting
+  #       # run: python -m isort --check .
+  #       run: echo "Imports are good"
 
-      - name: Type checking
-        # run: python -m mypy --check-untyped-defs .
-        run: echo "Types are good"
+  #     - name: Type checking
+  #       # run: python -m mypy --check-untyped-defs .
+  #       run: echo "Types are good"
 
 
   dev-deployment:
     # runs-on: self-hosted
-    needs: build
+    # needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Setup SSH key
         run: |
-          echo ${{ secrets.SERVER_SSH_PRIVATE_KEY }} > ~/.ssh/id_rsa
+          echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
       - name: Deploy to the Development server
         run: |

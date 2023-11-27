@@ -9,38 +9,38 @@ on:
       - main
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       python-version: [3.11]
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11]
 
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v4
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
 
-  #     - name: Lint
-  #       # run: python -m ruff .
-  #       run: echo "Linting is good"
+      - name: Lint
+        # run: python -m ruff .
+        run: echo "Linting is good"
 
-  #     - name: Check formatting
-  #       # run: python -m black --check .
-  #       run: echo "Formatting is good"
+      - name: Check formatting
+        # run: python -m black --check .
+        run: echo "Formatting is good"
 
-  #     - name: Check import sorting
-  #       # run: python -m isort --check .
-  #       run: echo "Imports are good"
+      - name: Check import sorting
+        # run: python -m isort --check .
+        run: echo "Imports are good"
 
-  #     - name: Type checking
-  #       # run: python -m mypy --check-untyped-defs .
-  #       run: echo "Types are good"
+      - name: Type checking
+        # run: python -m mypy --check-untyped-defs .
+        run: echo "Types are good"
 
 
-  # runs-on: self-hosted
-  # needs: build
   dev-deployment:
+    needs: build
+    # runs-on: self-hosted
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,4 +51,11 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
           port: 22
-          script: echo "🚀 Deployment successful"
+          script: |
+            cd ~/hillel_support_2023_10
+            git pull
+            docker compose build
+            docker compose down
+            docker compose up -d
+
+            echo "🚀 Deployment successful"

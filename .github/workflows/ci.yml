@@ -36,3 +36,19 @@ jobs:
       - name: Type checking
         # run: python -m mypy --check-untyped-defs .
         run: echo "Types are good"
+
+
+  dev-deployment:
+    # runs-on: self-hosted
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup SSH key
+        run: |
+          echo ${{ secrets.SERVER_SSH_PRIVATE_KEY }} > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+      - name: Deploy to the Development server
+        run: |
+          echo "Current folder -> $PWD"
+          ssh -o StrictHostKeyChecking=no root@164.90.235.97 "$(<./deployments/dev/deploy.sh)"

@@ -39,7 +39,7 @@ jobs:
 
 
   dev-deployment:
-    if: startsWith(github.ref, 'refs/tags/v.*')
+    if: startsWith(github.ref, 'refs/tags/v*')
     needs: build
     # runs-on: self-hosted
     runs-on: ubuntu-latest

@@ -22,6 +22,8 @@ isort = "~=5.12"
 mypy = "~=1.5"
 pympler = "~=1.0"
 ruff = "~=0.0.291"
+pytest = "*"
+drf-yasg = "*"
 
 [requires]
 python_version = "3.11"
